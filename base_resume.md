@@ -18,7 +18,7 @@ Results-driven Data Scientist with 5+ years of experience in developing and depl
 
 ## TECHNICAL EXPERIENCE
 
-**Computational Modeling Scientist** | The Dow Chemical Company | April 2023–Present
+**Senior Data Scientist** | The Dow Chemical Company | April 2023–Present
 
 * Developed and deployed deep learning models (TensorFlow, PyTorch) for molecule discovery, reducing search time by 87% and contributing to a patented innovation.
 * Built and productionized AI-powered compliance chatbots (Python, Streamlit, OpenAI APIs), reducing lookup times by 10+ hours per review.
@@ -52,4 +52,4 @@ M.S., Chemical Engineering | University of Arkansas | 2020 GPA: 3.98
 
 B.S., Chemical Engineering | University of Oklahoma | 2018 GPA: 3.85
 
-Continued Education : Machine Learning Certification (Coursera, 2025), Deep Learning Certification (Coursera, 2025), Data Structures and Algorithms Certification (Packt, 2025)
+Continued Education : Machine Learning Certification (Coursera, 2025), Deep Learning Certification (Coursera, 2025), Data Structures and Algorithms Certification (Coursera, 2025)

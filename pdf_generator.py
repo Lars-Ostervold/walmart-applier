@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 class PdfGenerator:
     # Removed pandoc_path, template_path. Added css_path.
-    def __init__(self, css_path: str = "style.css", max_iterations: int = 3):
+    def __init__(self, css_path: str = "style.css", max_iterations: int = 10):
         self.css_path = Path(css_path)
         self.max_iterations = max_iterations
         self.model = self._configure_llm()
@@ -75,41 +75,65 @@ class PdfGenerator:
 
     # Kept this function - it extracts info from the *input* Markdown
     def _extract_header_info(self, md_content: str) -> tuple[str, str, str]:
-        """Extracts Name, Contact, and Body from Markdown assuming H1 Name, then Contact Para."""
+        """Extracts Name, Contact, and Body from Markdown.
+        Handles H1 Name potentially followed by a blank line, then a contact paragraph.
+        """
         name = ""
         contact = ""
         body = md_content # Default to full content
-        lines = md_content.split('\n', 2)
+        lines = md_content.split('\n') # Split into all lines
 
         if len(lines) > 0 and lines[0].startswith('# '):
             name = lines[0][2:].strip()
             logger.info(f"Extracted Name: '{name}'")
-            # Check for Contact (paragraph after Name, before potential double newline)
-            if len(lines) > 1 and lines[1].strip() and not lines[1].strip().startswith('#'):
-                contact = lines[1].strip()
-                logger.info(f"Extracted Contact: '{contact}'")
-                # Body is the rest
-                if len(lines) > 2:
-                    body = lines[2]
-                else:
-                    body = ""
-            else:
-                logger.warning("Did not find contact info on the second line.")
-                # Only Name found, body is the rest
-                if len(lines) > 1:
-                     body = "\n".join(lines[1:])
-                else:
-                    body = ""
-        else:
-            logger.warning("Could not extract Name/Contact header from input Markdown. Expected H1 for Name.")
-            body = md_content
 
-        return name, contact, body
+            body_start_index = 1 # Default: body starts after name
+            # Check line 1 (index 1)
+            if len(lines) > 1 and lines[1].strip() and not lines[1].strip().startswith('#'):
+                # Line 1 has non-empty content and is not a header: assume it's contact
+                contact = lines[1].strip()
+                logger.info(f"Extracted Contact (line 2): '{contact}'")
+                body_start_index = 2 # Body starts after contact
+            elif len(lines) > 2 and not lines[1].strip(): # Check if line 1 is blank
+                # Line 1 is blank, check line 2 (index 2)
+                if lines[2].strip() and not lines[2].strip().startswith('#'):
+                     # Line 2 has non-empty content and is not a header: assume it's contact
+                    contact = lines[2].strip()
+                    logger.info(f"Extracted Contact (line 3 after blank): '{contact}'")
+                    body_start_index = 3 # Body starts after contact and the preceding blank line
+                else:
+                     # Line 1 blank, Line 2 also blank or a header - no contact found near name
+                     logger.warning("Found blank line after name, but no contact info on the next line.")
+                     body_start_index = 1 # Treat everything after Name as body
+            else:
+                # Line 1 immediately follows name and is either empty or a header - no contact found
+                logger.warning("Did not find contact info immediately after name.")
+                body_start_index = 1 # Treat everything after Name as body
+
+            # Join the rest of the lines for the body
+            if len(lines) > body_start_index:
+                body = "\n".join(lines[body_start_index:])
+            else:
+                body = "" # No body content found
+        else:
+            logger.warning("Could not extract Name header from input Markdown. Expected H1 for Name.")
+            # Keep body as the full content if Name not found
+
+        return name, contact, body.strip() # Return stripped body
 
     # Renamed from _run_pandoc. Uses WeasyPrint now.
     def _generate_pdf_from_html(self, html_body_content: str, name: str, contact: str, output_pdf_path: Path) -> bool:
         """Generates a PDF from HTML body content using WeasyPrint."""
-        # Construct the full HTML document
+
+        # --- Convert Markdown links in contact string to HTML links ---
+        if contact:
+            contact_html = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', contact)
+            logger.debug(f"Converted contact Markdown links to HTML: '{contact_html}'")
+        else:
+            contact_html = ''
+        # ------------------------------------------------------------
+
+        # Construct the full HTML document using the processed contact_html
         full_html = f"""
         <!DOCTYPE html>
         <html lang="en">
@@ -121,7 +145,7 @@ class PdfGenerator:
         <body>
             <div class="header">
                 <div class="name">{name if name else ''}</div>
-                <div class="contact">{contact if contact else ''}</div>
+                <div class="contact">{contact_html}</div>
             </div>
             <main>
                 {html_body_content}
@@ -133,15 +157,11 @@ class PdfGenerator:
         logger.info(f"Generating PDF with WeasyPrint -> {output_pdf_path}")
         success = False
         try:
-            # Use WeasyPrint to render HTML string to PDF file
             HTML(string=full_html, base_url=str(Path().resolve())).write_pdf(output_pdf_path)
             logger.info(f"WeasyPrint generated PDF successfully: {output_pdf_path}")
             success = True
         except Exception as e:
-            # Catch potential WeasyPrint errors
             logger.error(f"WeasyPrint failed to generate PDF: {str(e)}")
-            # Add more specific error handling if needed
-
         return success
 
     # Kept this function for reading PDF page count
@@ -171,7 +191,25 @@ class PdfGenerator:
              return "" # Return empty string for Markdown
 
         prompt = f"""
-        **Task:** Condense the key information from the following Markdown resume **BODY** significantly to help the entire resume fit onto a SINGLE PDF page. Use the provided Job Description as context to prioritize keeping the most relevant information.
+        **Task:** Condense the key information from the following Markdown resume **BODY** so the resume fully fills a SINGLE PDF page. Use the provided Job Description as context to prioritize keeping the most relevant information. This is an iterative process, so make sure to only remove the least relevant information each iteration rather than making many changes at once.
+
+        **Instructions:**
+        *   **Primary Goal:** Reduce the length of the BODY content by choosing ONE ACTIONS from the order of operations below. Do not make multiple changes at once.
+        *   **VERY IMPORTANT YOU ARE ONLY ALLOWED TO DO THE FOLLOWING AND ONLY ONE OF THESE AT A TIME:**
+            *   **1)** Check for redundant degrees. If both BS and MS are present, remove the BS degree. If PhD, check if MS is present and remove it if so. Etc.
+            *   **2)** Check if there are more than 4 categories in the TECHNICAL SKILLS section. If so, combine the skills into 4 categories or less. DO NOT REMOVE ANY OF THE INDIVIDUAL SKILLS UNDER PENALTY OF DEATH.
+            *   **3)** Check for low-impact bullet points in the EXPERIENCE and PROJECTS sections. If a bullet point is not critical to the Target Job Description, remove it.
+            *   **4)** Check for redundant bullet points in the EXPERIENCE and PROJECTS sections. If two bullet points are very similar, remove the least relevant one.
+            *   **5)** Check for low-impact experiences in the EXPERIENCE section. If an experience is not relevant to the Target Job Description, remove it. Make sure at least 2 experiences are kept.
+            *   **6)** Check for low-impact experiences in the PROJECTS section. If a project is not relevant to the Target Job Description, remove it. Make sure at least 2 projects are kept.
+            *   **7)** See if the 'SUMMARY' section can be polished to maintain the same impact but be slightly shorter.
+        *   **DO NOT UNDER ANY CIRCUMSTANCES UNDER PENALTY OF DEATH:** 
+            *   **1)** NEVER remove any specific skill in the technical skills section. You may only combine skills into fewer categories but you may not remove any skills. If you remove any skills, you will be shot in the face.
+            *   **2)** DO NOT remove the 'Continued Education' section if the job has AI/ML/NLP/etc as a requirement. 
+            *   **3)** DO NOT remove the 'SUMMARY' section.
+        *   **Preserve Core Value:** Do NOT remove key achievements or essential skills highly relevant to the job.
+        *   **Output Format:** Return ONLY the condensed content formatted as clean, standard **Markdown**, suitable for the BODY section of a resume. Adhere to standard Markdown syntax (e.g., `##`, `###`, `-` or `*` for lists).
+        *   **Crucially:** Do **NOT** include the ````markdown` code fences in your output. Only provide the condensed Markdown resume BODY content.
 
         **Input Resume BODY (Markdown):**
         ```markdown
@@ -182,13 +220,6 @@ class PdfGenerator:
         ```
         {job_description}
         ```
-
-        **Instructions:**
-        *   **Primary Goal:** Reduce the length of the BODY content by shortening sentences, combining points, and removing less critical details (skills, experience) **least relevant** to the Target Job Description.
-        *   **Preserve Core Value:** Do NOT remove key achievements or essential skills highly relevant to the job.
-        *   **Maintain Professionalism:** Keep the tone professional.
-        *   **Output Format:** Return ONLY the condensed content formatted as clean, standard **Markdown**, suitable for the BODY section of a resume. Adhere to standard Markdown syntax (e.g., `##`, `###`, `-` or `*` for lists).
-        *   **Crucially:** Do **NOT** include the original Name/Contact header (which is not part of the input body), `<html>`, `<head>`, `<body>` tags, or ````markdown` code fences in your output. Only provide the condensed Markdown resume BODY content.
 
         **Condensed Markdown Resume BODY Content:**
         """
@@ -228,11 +259,6 @@ class PdfGenerator:
         prompt = f"""
         **Task:** Convert the following resume **BODY** content from Markdown format to clean, semantic **HTML body elements**. Ensure the HTML structure matches standard resume sections.
 
-        **Input Resume BODY (Markdown):**
-        ```markdown
-        {md_body_content}
-        ```
-
         **Instructions:**
         *   **Primary Goal:** Convert the Markdown structure to equivalent HTML.
         *   **HTML Formatting:**
@@ -244,6 +270,11 @@ class PdfGenerator:
             *   Convert Markdown links `[text](url)` to HTML `<a>` tags `<a href="url">text</a>`.
             *   Keep the content otherwise identical to the input Markdown.
         *   **Output:** Return ONLY the converted **HTML body elements**. Do **NOT** include `<html>`, `<head>`, `<body>` tags, or ````html` code fences in your output. Only provide the inner HTML elements that would go inside the `<body>`.
+
+        **Input Resume BODY (Markdown):**
+        ```markdown
+        {md_body_content}
+        ```
 
         **Converted HTML Resume BODY Content:**
         """

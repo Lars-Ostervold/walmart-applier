@@ -96,17 +96,18 @@ class ResumeEditor:
 
         prompt = f"""
         **Task:** Edit the provided Base Resume (Markdown format) to be highly optimized for the specific Job Description below. The resume should be dripping with keywords that are relevant to the job description and wow the ATS screening bots and the recruiter. Use relevant details from the Supplementary CV (Markdown format) to strengthen the resume's impact and alignment with the target role, but do not add skills or experiences the user doesn't possess. 
-        
+
         The final output MUST be the complete, ATS-friendly edited resume in Markdown format, adhering STRICTLY to the formatting guidelines below, ready to be saved to a .md file.
 
         **Formatting Guidelines:**
         1.  **Header:** Start the document *immediately* with:
             *   The candidate's full name as a Level 1 Markdown Header (e.g., `# Lars Ostervold`).
             *   Followed *immediately* by a single paragraph containing contact information (e.g., `LOstervold@dow.com | 918.845.3010 | [LinkedIn](URL) | [GitHub](URL)`). Use pipe symbols (|) as separators.
-        2.  **Sections:** Use Level 2 Markdown Headers (e.g., `## SUMMARY`, `## TECHNICAL SKILLS`, `## TECHNICAL EXPERIENCE`, `## PROJECTS`, `## EDUCATION`) for standard resume sections. Ensure these headers are ALL CAPS.
+        2.  **Sections:** Use Level 2 Markdown Headers (e.g., `## SUMMARY`, `## TECHNICAL SKILLS`, `## TECHNICAL EXPERIENCE`, `## PROJECTS`, `## EDUCATION`) for standard resume sections. Ensure these headers are ALL CAPS. Do not forget any sections from the base resume.
         3.  **Experience/Projects:**
             *   Use Level 3 Headers (e.g., `### Job Title | Company Name`) for job titles or project names.
-            *   Immediately follow the H3 header with a line for the date range, ideally using an en dash (–) like `Month YYYY – Present` or `Month YYYY – Month YYYY`.
+            *   **Project Links:** If a project has a URL, include the Markdown link *within the H3 header itself*, like `### Project Name | [Link](URL)` or `### Project Name ([Link](URL))`. Do NOT put the link on a separate line.
+            *   Immediately follow the H3 header line with a separate line for the date range, ideally using an en dash (–) like `Month YYYY – Present` or `Month YYYY – Month YYYY`.
             *   Use standard Markdown bullet points (`- ` or `* `) for responsibilities and achievements under each role/project.
         4.  **Strict Output:** The output MUST be ONLY the full, edited Markdown resume content, starting directly with the H1 Name header. Do not include *any* introductory text, explanations, ```markdown``` tags, or other text before or after the resume content.
 

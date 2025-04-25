@@ -1,0 +1,112 @@
+\documentclass[11pt, letterpaper]{article}
+\usepackage{geometry}
+\usepackage{fontspec} % Used for custom fonts
+\usepackage{unicode-math} % Often needed with fontspec
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc} 
+\usepackage{textcomp} 
+\usepackage{hyperref} 
+\usepackage{microtype} 
+\usepackage{enumitem} 
+\usepackage{titlesec} 
+\usepackage{metalogo} % Required for XeTeX/LuaTeX logo if used
+\usepackage{needspace} % Prevent sections starting at bottom of page
+\usepackage{tabularx} % For potential alignment help if needed later
+\usepackage{ragged2e} % For better alignment options like Centering
+\usepackage{xcolor} % <<< Add package for color definitions
+
+% --- Define \tightlist to avoid errors (even if it does nothing) ---
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% ------------------------------------------------------------------
+
+% --- Font Setup ---
+\setmainfont{Roboto} % Set Roboto as the main font
+\setsansfont{Roboto} % Set Roboto as the sans-serif font
+% Optional: Define other weights if needed and installed
+% \newfontfamily\robotolight{Roboto Light}
+% \newfontfamily\robotobold{Roboto Bold}
+
+% --- Page Layout ---
+\geometry{
+    letterpaper,
+    top=0.6in, % Adjust margins slightly for more space
+    bottom=0.6in,
+    left=0.7in,
+    right=0.7in,
+    headheight=12pt,
+    headsep=10pt,
+    footskip=0.4in 
+}
+\pagestyle{empty} % No page numbers
+
+% --- Custom Maketitle --- 
+% Define how the title (Name) and author (Contact) are displayed
+\title{$if(name)$$name$$endif$} % Get name from variable
+\author{$if(contact)$$contact$$endif$} % Get contact from variable
+\date{} % No date
+
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{center}
+  \fontsize{18pt}{22pt}\bfseries \@title\par % Use the stored title (Name)
+  \vspace{4pt} % Space between name and contact
+  \fontsize{10pt}{12pt}\@author\par % Use the stored author (Contact)
+  \end{center}%
+  \vspace{1.5em} % Space after header
+}
+\makeatother
+% ------------------------
+
+% --- Section Formatting ---
+\titleformat{\section}
+  {\vspace{1.5ex}\large\bfseries\MakeUppercase} % Add space above, Large, Bold, Uppercase
+  {\thesection}{0em}{}
+  [\vspace{-0.5ex}\titlerule] % Add a horizontal rule below the title
+\titlespacing*{\section}{0pt}{*2}{*1.5} % Adjust spacing around sections
+
+\titleformat{\subsection}
+  {\vspace{1ex}\normalsize\bfseries} % Space above, Normal size, Bold
+  {\thesubsection}{0em}{}
+\titlespacing*{\subsection}{0pt}{*1.5}{*1}
+
+% --- List Formatting ---
+\setlist[itemize]{leftmargin=*, itemsep=2pt, topsep=3pt, parsep=0pt} % Adjust bullet point spacing
+\setlist[itemize,1]{\label=\textbullet} % Standard bullet
+
+% --- Date Handling Attempt --- 
+% This relies on Markdown having dates consistently at the end, maybe after " | "
+% We redefine the paragraph command slightly to check for a potential pattern
+% This is EXPERIMENTAL and might break things or not work reliably.
+% \usepackage{etoolbox}
+% \let\oldparagraph\paragraph
+% \renewcommand{\paragraph}[1]{\oldparagraph{#1}\par}
+% \makeatletter
+% \def\paragraph{\@startsection{paragraph}{4}{\z@}{\parskip}{-0.5em}{\normalsize\bfseries}}
+% \patchcmd{\paragraph}{\par}{}{}{}
+% \apptocmd{\paragraph}{~\hfill}{}{}
+% \makeatother
+% A simpler attempt might be to rely on the LLM placing dates consistently
+% and maybe using a Markdown table for experience for better alignment control.
+% For now, we'll primarily rely on the LLM prompt for date placement.
+
+% --- Hyperlink Setup ---
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black, % Slightly darker blue
+    urlcolor=blue!70!black,
+    pdftitle={$if(name)$$name$$else$Resume$endif$}, % Use name var for PDF title
+    pdfauthor={$if(name)$$name$$endif$}, % Use name var for PDF author
+    pdfsubject={Resume},
+    pdfkeywords={$if(keywords)$$keywords$$endif$}
+}
+
+% --- Document Start ---
+\begin{document}
+
+\maketitle % <<< Call the custom maketitle command here
+
+% Pandoc will insert the BODY content (from the temp file) here
+$body$
+
+\end{document} 

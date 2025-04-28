@@ -1,4 +1,50 @@
 {
+  "https://careers.walmart.com/us/jobs/WD2061137-principal-data-scientist": {
+    "explanation": "Submission process failed. See logs.",
+    "history": [
+      {
+        "explanation": "The job description aligns well with the candidate's experience in data science, machine learning, and cloud technologies, and it doesn't violate either hard rule.",
+        "status": "Relevant",
+        "timestamp": "2025-04-28T19:06:19.776696"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-04-28T19:06:28.717060"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-04-28T19:07:37.171383"
+      }
+    ],
+    "last_updated": "2025-04-28T19:07:37.171383",
+    "status": "Error_Submitting",
+    "title": "Principal, Data Scientist"
+  },
+  "https://careers.walmart.com/us/jobs/WD2111652-principal-data-scientist": {
+    "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_Principal,_Data_Scientist_2111652.pdf",
+    "history": [
+      {
+        "explanation": "The role aligns well with the candidate's extensive data science experience, Python proficiency, and cloud experience, and does not violate the hard rules.",
+        "status": "Relevant",
+        "timestamp": "2025-04-28T19:12:24.502585"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-04-28T19:12:36.838684"
+      },
+      {
+        "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_Principal,_Data_Scientist_2111652.pdf",
+        "status": "Error_PDF_Generation",
+        "timestamp": "2025-04-28T19:13:46.393609"
+      }
+    ],
+    "last_updated": "2025-04-28T19:13:46.393609",
+    "status": "Error_PDF_Generation",
+    "title": "Principal, Data Scientist"
+  },
   "https://careers.walmart.com/us/jobs/WD2149258-data-scientist-iii": {
     "explanation": "Submission process failed. See logs.",
     "history": [

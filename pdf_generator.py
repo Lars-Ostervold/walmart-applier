@@ -234,7 +234,7 @@ class PdfGenerator:
 
             # Relax the check slightly (e.g., allow 99% of original length)
             # Also check if it's empty
-            if not cleaned_shortened_md_body or len(cleaned_shortened_md_body) >= len(md_body_content) * 0.999:
+            if not cleaned_shortened_md_body:
                  feedback = getattr(response, 'prompt_feedback', 'Unknown feedback')
                  logger.warning(f"LLM did not return usable shortened Markdown body or failed to shorten significantly. Feedback: {feedback}")
                  # Log the raw response for debugging

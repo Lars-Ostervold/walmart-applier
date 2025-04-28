@@ -86,4 +86,13 @@ jobs:
         with:
           name: scheduled-processed-jobs-log
           path: processed_jobs.json
-          if-no-files-found: ignore 
+          if-no-files-found: ignore
+
+      - name: Upload Error Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scheduled-error-screenshots
+          path: '*.png' # Upload any PNG files in the root directory
+          if-no-files-found: ignore # Don't fail if no screenshots were saved
+          retention-days: 7 # Keep screenshots for 7 days 

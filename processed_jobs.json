@@ -21,5 +21,28 @@
     "last_updated": "2025-04-28T09:46:50.580784",
     "status": "Error_Submitting",
     "title": "Data Scientist III"
+  },
+  "https://careers.walmart.com/us/jobs/WD2149267-data-scientist-iii": {
+    "explanation": "Successfully submitted via automation.",
+    "history": [
+      {
+        "explanation": "The job description aligns well with the candidate's data science and Python expertise, and does not violate either hard rule.",
+        "status": "Relevant",
+        "timestamp": "2025-04-28T10:02:15.160571"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-04-28T10:02:22.318071"
+      },
+      {
+        "explanation": "Successfully submitted via automation.",
+        "status": "Applied",
+        "timestamp": "2025-04-28T10:04:30.676606"
+      }
+    ],
+    "last_updated": "2025-04-28T10:04:30.676606",
+    "status": "Applied",
+    "title": "Data Scientist III"
   }
 }

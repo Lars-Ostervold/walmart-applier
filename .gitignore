@@ -1,6 +1,3 @@
-#TEmp gitignore so actions doesn't run
-.github/workflows/*
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

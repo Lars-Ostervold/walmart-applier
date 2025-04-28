@@ -196,7 +196,7 @@ class PdfGenerator:
         **Instructions & Order of Operations:**
         *   **Primary Goal:** Reduce the length of the BODY content by applying *only ONE* of the following actions in the listed order of preference. 
         *   **Actions (VERY IMPORTANT: Apply ONLY ONE per attempt):**
-            *   **1)** Redundant Degrees: Check for redundant degrees (e.g., BS if MS present, MS if PhD present). If found, remove the lower-level degree.
+            *   **1)** Check for redundant degrees. If both BS and MS are present, remove the BS degree. If PhD, check if MS is present and remove it if so. Etc.
             *   **2)** Skill Categories: If the TECHNICAL SKILLS section has more than 4 categories, combine skills into 4 or fewer categories. **Crucially, do not remove individual skills listed.**
             *   **3)** Low-Impact Bullets: Identify and remove the single least relevant bullet point from the EXPERIENCE or PROJECTS section, considering the Target Job Description.
             *   **4)** Redundant Bullets: Identify and remove one bullet point in EXPERIENCE or PROJECTS that is very similar to another, keeping the more impactful one.

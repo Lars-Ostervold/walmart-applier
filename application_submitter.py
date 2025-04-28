@@ -16,6 +16,7 @@ from typing import Union # <<< Add Union
 import json # <<< Add json
 import google.generativeai as genai
 import re # <<< Add import re
+import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -55,6 +56,18 @@ class ApplicationSubmitter:
             logger.error(f"Failed to initialize WebDriver: {e}")
             sys.exit(1)
 
+    def _save_screenshot(self, prefix: str = "error") -> str:
+        """Saves a screenshot with timestamp and returns the filename."""
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{prefix}_{timestamp}.png"
+        try:
+            self.driver.save_screenshot(filename)
+            logger.info(f"Saved screenshot to {filename}")
+            return filename
+        except Exception as e:
+            logger.error(f"Failed to save screenshot: {e}")
+            return None
+
     def navigate_to_job_page(self, job_url: str):
         """Navigates to the job description page."""
         logger.info(f"Navigating to job page: {job_url}")
@@ -68,9 +81,11 @@ class ApplicationSubmitter:
             return True
         except TimeoutException:
             logger.error(f"Timeout waiting for Apply button on job page: {job_url}")
+            self._save_screenshot("job_page_timeout")
             return False
         except Exception as e:
             logger.error(f"Error navigating to job page {job_url}: {e}")
+            self._save_screenshot("job_page_error")
             return False
 
     def navigate_to_apply_page(self):
@@ -86,6 +101,7 @@ class ApplicationSubmitter:
             apply_url = apply_link_element.get_attribute('href')
             if not apply_url:
                 logger.error("Found the Apply link element, but it has no href attribute.")
+                self._save_screenshot("apply_link_no_href")
                 return False
                 
             logger.info(f"Extracted Apply URL: {apply_url}")
@@ -93,8 +109,6 @@ class ApplicationSubmitter:
             self.driver.get(apply_url) # Navigate in the current tab
             
             # Add a wait after navigation to ensure the new page starts loading
-            # Wait for a known element on the Workday sign-in/application page
-            # Example: Wait for the "Sign In" span OR the "Use My Last Application" button
             WebDriverWait(self.driver, 20).until(
                 EC.any_of(
                     EC.presence_of_element_located((By.XPATH, "//span[contains(text(), 'Sign In')]")),
@@ -106,9 +120,11 @@ class ApplicationSubmitter:
 
         except TimeoutException:
             logger.error("Timeout waiting for the Apply link element or the subsequent Workday page element.")
+            self._save_screenshot("apply_page_timeout")
             return False
         except Exception as e:
             logger.error(f"Error extracting Apply link or navigating: {e}")
+            self._save_screenshot("apply_page_error")
             return False
             
     def _human_like_send_keys(self, element, text):
@@ -166,12 +182,15 @@ class ApplicationSubmitter:
 
             except TimeoutException as e:
                  logger.error(f"Timeout during sign in process: {e}")
+                 self._save_screenshot("signin_timeout")
                  return False
             except NoSuchElementException as e:
                  logger.error(f"Could not find element during sign in: {e}")
+                 self._save_screenshot("signin_missing_element")
                  return False
             except Exception as e:
                  logger.error(f"An unexpected error occurred during sign in: {e}")
+                 self._save_screenshot("signin_error")
                  return False
             
         except TimeoutException:
@@ -179,6 +198,7 @@ class ApplicationSubmitter:
             return True 
         except Exception as e:
              logger.error(f"Error checking for Sign In prompt: {e}")
+             self._save_screenshot("signin_check_error")
              return False
 
     def click_use_last_application(self) -> bool:
@@ -196,9 +216,11 @@ class ApplicationSubmitter:
             return True
         except TimeoutException:
             logger.error("Timeout waiting for 'Use My Last Application' button.")
+            self._save_screenshot("use_last_app_timeout")
             return False
         except Exception as e:
             logger.error(f"Error clicking 'Use My Last Application': {e}")
+            self._save_screenshot("use_last_app_error")
             return False
             
     def handle_referral_source(self) -> bool:
@@ -258,24 +280,14 @@ class ApplicationSubmitter:
                 # Check if the *container* was ever visible 
                 self.driver.find_element(*search_container_selector)
                 logger.error("Timeout occurred. Search container found but wasn't clickable, or dropdown options failed.")
-                screenshot_path = "referral_timeout_error.png"
-                try:
-                    self.driver.save_screenshot(screenshot_path)
-                    logger.info(f"Saved screenshot to {screenshot_path}")
-                except Exception as ss_err:
-                    logger.error(f"Failed to save screenshot: {ss_err}")
+                self._save_screenshot("referral_timeout")
                 return False
             except NoSuchElementException:
                 logger.info("'How did you hear about us?' container not found in DOM. Skipping referral step.")
                 return True
         except Exception as e:
             logger.error(f"An error occurred while handling referral source: {e}", exc_info=True)
-            screenshot_path = "referral_exception_error.png"
-            try:
-                self.driver.save_screenshot(screenshot_path)
-                logger.info(f"Saved screenshot to {screenshot_path}")
-            except Exception as ss_err:
-                logger.error(f"Failed to save screenshot: {ss_err}")
+            self._save_screenshot("referral_error")
             return False
 
     def run_application_start(self, job_url: str):
@@ -384,14 +396,15 @@ class ApplicationSubmitter:
             save_button.click()
             logger.info("Clicked 'Save and Continue'.")
             # Wait for the next section/page to start loading
-            # This might need a more specific wait for an element on the *next* page
             time.sleep(3) 
             return True
         except TimeoutException:
             logger.error("Timeout waiting for 'Save and Continue' button.")
+            self._save_screenshot("save_continue_timeout")
             return False
         except Exception as e:
             logger.error(f"Error clicking 'Save and Continue': {e}")
+            self._save_screenshot("save_continue_error")
             return False
 
     def _generate_role_descriptions(self, job_description: str) -> Union[dict, None]:
@@ -587,10 +600,12 @@ class ApplicationSubmitter:
                         time.sleep(1)  # Wait for deletion to process
                     except Exception as e:
                         logger.warning(f"Error clicking delete button: {e}")
+                        self._save_screenshot("resume_delete_error")
             else:
                 logger.info("No existing resumes found to delete")
         except Exception as e:
             logger.warning(f"Error checking for delete buttons: {e}")
+            self._save_screenshot("resume_delete_check_error")
 
         # --- Upload new resume --- 
         upload_input_selector = (By.CSS_SELECTOR, 'input[data-automation-id="file-upload-input-ref"][type="file"]')
@@ -604,8 +619,6 @@ class ApplicationSubmitter:
             upload_input.send_keys(str(resume_pdf_path.resolve())) # Send absolute path
             
             # Add a wait for upload confirmation (e.g., new delete button appears with *new* filename)
-            # This is crucial but hard to define without seeing the page after upload.
-            # Let's wait for *a* delete button to appear again after a delay.
             logger.info("Waiting for upload to process (checking for delete button appearance)...")
             time.sleep(1) # Initial pause
             WebDriverWait(self.driver, 20).until( # Longer wait for upload processing
@@ -615,9 +628,11 @@ class ApplicationSubmitter:
             return True
         except TimeoutException:
             logger.error("Timeout waiting for file upload input to appear, or for upload confirmation (delete button). Upload might have failed.")
+            self._save_screenshot("resume_upload_timeout")
             return False
         except Exception as e:
             logger.error(f"Error uploading resume: {e}")
+            self._save_screenshot("resume_upload_error")
             return False
 
     def handle_application_questions(self) -> bool:
@@ -694,9 +709,11 @@ class ApplicationSubmitter:
             
         except TimeoutException as e:
             logger.error(f"Timeout while handling application questions: {e}")
+            self._save_screenshot("application_questions_timeout")
             return False
         except Exception as e:
             logger.error(f"Error handling application questions: {e}")
+            self._save_screenshot("application_questions_error")
             return False
 
     def handle_voluntary_disclosures(self) -> bool:
@@ -759,6 +776,7 @@ class ApplicationSubmitter:
                 # Use the element found by presence wait
                 if not terms_checkbox.is_enabled():
                      logger.warning("Terms checkbox found but is disabled. Cannot click.")
+                     self._save_screenshot("terms_checkbox_disabled")
                      return False # Can't click a disabled element
                      
                 # Try JS click first
@@ -782,18 +800,16 @@ class ApplicationSubmitter:
                      logger.info("Accepted terms and conditions successfully.")
                 else:
                      logger.error("Failed to select the terms and conditions checkbox after JS and direct click attempts.")
-                     # Optional: Add screenshot here
-                     self.driver.save_screenshot("terms_checkbox_failure.png")
+                     self._save_screenshot("terms_checkbox_failure")
                      return False # Indicate failure
                      
             except TimeoutException:
                 logger.error("Timeout waiting for checkbox to be clickable during fallback direct click.")
-                self.driver.save_screenshot("terms_checkbox_timeout.png")
+                self._save_screenshot("terms_checkbox_timeout")
                 return False
             except Exception as e:
                 logger.error(f"Error clicking terms checkbox: {e}")
-                # Optional: Add screenshot here
-                self.driver.save_screenshot("terms_checkbox_error.png")
+                self._save_screenshot("terms_checkbox_error")
                 return False # Indicate failure
             
             logger.info("Successfully completed voluntary disclosures")
@@ -801,9 +817,11 @@ class ApplicationSubmitter:
             
         except TimeoutException as e:
             logger.error(f"Timeout while handling voluntary disclosures: {e}")
+            self._save_screenshot("voluntary_disclosures_timeout")
             return False
         except Exception as e:
             logger.error(f"Error handling voluntary disclosures: {e}")
+            self._save_screenshot("voluntary_disclosures_error")
             return False
 
     def handle_final_submission(self) -> bool:
@@ -832,9 +850,11 @@ class ApplicationSubmitter:
             
         except TimeoutException as e:
             logger.error(f"Timeout while handling final submission: {e}")
+            self._save_screenshot("final_submission_timeout")
             return False
         except Exception as e:
             logger.error(f"Error handling final submission: {e}")
+            self._save_screenshot("final_submission_error")
             return False
 
     def run_full_application(self, job_url: str, job_description: str, generated_pdf_path: Path):

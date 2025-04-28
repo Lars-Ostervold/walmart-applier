@@ -22,6 +22,29 @@
     "status": "Error_Submitting",
     "title": "Principal, Data Scientist"
   },
+  "https://careers.walmart.com/us/jobs/WD2111643-principal-data-scientist": {
+    "explanation": "Successfully submitted via automation.",
+    "history": [
+      {
+        "explanation": "The role aligns well with the candidate's data science background, Python skills, and experience with cloud technologies like GCP.",
+        "status": "Relevant",
+        "timestamp": "2025-04-28T19:20:59.953834"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-04-28T19:21:09.998662"
+      },
+      {
+        "explanation": "Successfully submitted via automation.",
+        "status": "Applied",
+        "timestamp": "2025-04-28T19:24:12.565968"
+      }
+    ],
+    "last_updated": "2025-04-28T19:24:12.565968",
+    "status": "Applied",
+    "title": "Principal, Data Scientist"
+  },
   "https://careers.walmart.com/us/jobs/WD2111652-principal-data-scientist": {
     "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_Principal,_Data_Scientist_2111652.pdf",
     "history": [

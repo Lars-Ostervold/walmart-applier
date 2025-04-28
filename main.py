@@ -235,10 +235,6 @@ def run_job_pipeline(limit: int = None):
         for url, path_or_status in failed_pdfs.items():
              logger.warning(f"  - {url} -> {path_or_status}")
 
-    # --- 7. Next Steps (Placeholder) ---
-    # TODO: Implement Workday automation and application submission using the generated PDFs
-    logger.info("Placeholder for next steps: Application Submission")
-
     # --- 7. Application Submission ---
     logger.info(f"Step 7: Submitting applications for {len(successful_pdfs)} jobs...")
     submitter = None

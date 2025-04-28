@@ -47,7 +47,7 @@ class RelevanceChecker:
             genai.configure(api_key=api_key)
             # Use a Gemini model suitable for text generation/analysis (Flash is faster/cheaper)
             self.model = genai.GenerativeModel('gemini-2.0-flash-lite') 
-            logger.info("Google Generative AI configured successfully using gemini-1.5-flash-latest.")
+            logger.info("Google Generative AI configured successfully using gemini-2.0-flash-lite.")
         except Exception as e:
             logger.error(f"Failed to configure Google Generative AI: {str(e)}")
             self.model = None

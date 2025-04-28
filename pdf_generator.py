@@ -42,7 +42,7 @@ class PdfGenerator:
             return None
         try:
             genai.configure(api_key=api_key)
-            model = genai.GenerativeModel('gemini-1.5-flash-latest')
+            model = genai.GenerativeModel('gemini-2.0-flash-lite')
             logger.info("Google Generative AI configured successfully for PDF generator.")
             return model
         except Exception as e:

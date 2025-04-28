@@ -193,23 +193,24 @@ class PdfGenerator:
         prompt = f"""
         **Task:** Condense the key information from the following Markdown resume **BODY** so the resume fully fills a SINGLE PDF page. Use the provided Job Description as context to prioritize keeping the most relevant information. This is an iterative process, so make sure to only remove the least relevant information each iteration rather than making many changes at once.
 
-        **Instructions:**
-        *   **Primary Goal:** Reduce the length of the BODY content by choosing ONE ACTIONS from the order of operations below. Do not make multiple changes at once.
-        *   **VERY IMPORTANT YOU ARE ONLY ALLOWED TO DO THE FOLLOWING AND ONLY ONE OF THESE AT A TIME:**
-            *   **1)** Check for redundant degrees. If both BS and MS are present, remove the BS degree. If PhD, check if MS is present and remove it if so. Etc.
-            *   **2)** Check if there are more than 4 categories in the TECHNICAL SKILLS section. If so, combine the skills into 4 categories or less. DO NOT REMOVE ANY OF THE INDIVIDUAL SKILLS UNDER PENALTY OF DEATH.
-            *   **3)** Check for low-impact bullet points in the EXPERIENCE and PROJECTS sections. If a bullet point is not critical to the Target Job Description, remove it.
-            *   **4)** Check for redundant bullet points in the EXPERIENCE and PROJECTS sections. If two bullet points are very similar, remove the least relevant one.
-            *   **5)** Check for low-impact experiences in the EXPERIENCE section. If an experience is not relevant to the Target Job Description, remove it. Make sure at least 2 experiences are kept.
-            *   **6)** Check for low-impact experiences in the PROJECTS section. If a project is not relevant to the Target Job Description, remove it. Make sure at least 2 projects are kept.
-            *   **7)** See if the 'SUMMARY' section can be polished to maintain the same impact but be slightly shorter.
-        *   **DO NOT UNDER ANY CIRCUMSTANCES UNDER PENALTY OF DEATH:** 
-            *   **1)** NEVER remove any specific skill in the technical skills section. You may only combine skills into fewer categories but you may not remove any skills. If you remove any skills, you will be shot in the face.
-            *   **2)** DO NOT remove the 'Continued Education' section if the job has AI/ML/NLP/etc as a requirement. 
-            *   **3)** DO NOT remove the 'SUMMARY' section.
-        *   **Preserve Core Value:** Do NOT remove key achievements or essential skills highly relevant to the job.
+        **Instructions & Order of Operations:**
+        *   **Primary Goal:** Reduce the length of the BODY content by applying *only ONE* of the following actions in the listed order of preference. 
+        *   **Actions (VERY IMPORTANT: Apply ONLY ONE per attempt):**
+            *   **1)** Redundant Degrees: Check for redundant degrees (e.g., BS if MS present, MS if PhD present). If found, remove the lower-level degree.
+            *   **2)** Skill Categories: If the TECHNICAL SKILLS section has more than 4 categories, combine skills into 4 or fewer categories. **Crucially, do not remove individual skills listed.**
+            *   **3)** Low-Impact Bullets: Identify and remove the single least relevant bullet point from the EXPERIENCE or PROJECTS section, considering the Target Job Description.
+            *   **4)** Redundant Bullets: Identify and remove one bullet point in EXPERIENCE or PROJECTS that is very similar to another, keeping the more impactful one.
+            *   **5)** Low-Impact Experience: If there are more than 2 entries in EXPERIENCE, remove the single least relevant *entire* experience entry.
+            *   **6)** Low-Impact Project: If there are more than 2 entries in PROJECTS, remove the single least relevant *entire* project entry.
+            *   **7)** Summary Polish: Rephrase the 'SUMMARY' section slightly to be more concise while retaining the core message and impact.
+        *   **DO NOT UNDER ANY CIRCUMSTANCES UNDER PENALTY OF DEATH:**
+            *   **Skills:** Never remove any specific skill listed under TECHNICAL SKILLS. You MAY reorganize categories if necessary.
+            *   **Continued Education:** Do not remove the 'Continued Education' section if the job description mentions AI, ML, NLP, etc.
+            *   **Summary:** Do not remove the 'SUMMARY' section entirely.
+        *   **Preserve Core Value:** Avoid removing key achievements or essential skills highly relevant to the target job.
+        *   **If No Action Possible:** If you cannot apply any of the above actions without violating the constraints, return the original Markdown body content **UNCHANGED**.
         *   **Output Format:** Return ONLY the condensed content formatted as clean, standard **Markdown**, suitable for the BODY section of a resume. Adhere to standard Markdown syntax (e.g., `##`, `###`, `-` or `*` for lists).
-        *   **Crucially:** Do **NOT** include the ````markdown` code fences in your output. Only provide the condensed Markdown resume BODY content.
+        *   **Crucially:** Do **NOT** include ````markdown` code fences in your output. Only provide the condensed Markdown resume BODY content.
 
         **Input Resume BODY (Markdown):**
         ```markdown
@@ -229,14 +230,15 @@ class PdfGenerator:
             response = self.model.generate_content(prompt)
             raw_shortened_md_body = response.text.strip()
 
-            # Use the Markdown cleaning function (assuming it exists or reusing html one if simple fences)
-            # Let's rename the HTML cleaner back to a generic one
             cleaned_shortened_md_body = self._clean_llm_output(raw_shortened_md_body)
 
-            # Simple check: if the cleaned output is empty or not significantly shorter, fail.
-            if not cleaned_shortened_md_body or len(cleaned_shortened_md_body) >= len(md_body_content) * 0.98:
+            # Relax the check slightly (e.g., allow 99% of original length)
+            # Also check if it's empty
+            if not cleaned_shortened_md_body or len(cleaned_shortened_md_body) >= len(md_body_content) * 0.999:
                  feedback = getattr(response, 'prompt_feedback', 'Unknown feedback')
                  logger.warning(f"LLM did not return usable shortened Markdown body or failed to shorten significantly. Feedback: {feedback}")
+                 # Log the raw response for debugging
+                 logger.debug(f"Raw LLM response (shortening failed): {raw_shortened_md_body}")
                  return None
 
             logger.info("Successfully received and cleaned shortened resume Markdown body from LLM.")

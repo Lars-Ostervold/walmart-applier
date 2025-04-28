@@ -68,19 +68,21 @@ def run_job_pipeline(limit: int = None):
     # --- 2. Filter New Jobs ---
     logger.info("Step 2: Filtering out previously processed jobs...")
     job_filter = JobFilter(storage_file=PROCESSED_JOBS_FILE)
-    new_jobs = job_filter.filter_new_jobs(all_found_jobs)
-    if not new_jobs:
-        logger.info("No new jobs found to evaluate. Exiting pipeline.")
+    new_jobs, retry_jobs = job_filter.get_jobs_to_process(all_found_jobs)
+    jobs_to_evaluate = new_jobs + retry_jobs
+    
+    if not jobs_to_evaluate:
+        logger.info("No new or retry jobs found to evaluate. Exiting pipeline.")
         return
-    logger.info(f"Identified {len(new_jobs)} new jobs for evaluation.")
+    logger.info(f"Total jobs to evaluate in this run: {len(jobs_to_evaluate)} ({len(new_jobs)} new, {len(retry_jobs)} retry)")
 
     # --- 3. Evaluate New Jobs ---
-    logger.info("Step 3: Evaluating relevance of new jobs...")
+    logger.info("Step 3: Evaluating relevance of jobs...")
     relevance_checker = RelevanceChecker(resume_path=BASE_RESUME_PATH)
     relevant_jobs_for_editing = []
     evaluated_count = 0 # Counter for limit
 
-    for i, job in enumerate(new_jobs):
+    for i, job in enumerate(jobs_to_evaluate):
         # Apply Limit for Evaluation Step
         if limit is not None and evaluated_count >= limit:
             logger.info(f"Reached processing limit ({limit}). Stopping evaluation.")
@@ -89,7 +91,7 @@ def run_job_pipeline(limit: int = None):
 
         job_title = job.get('title', '[No Title]')
         job_url = job.get('url')
-        logger.info(f"-- Evaluating job {i+1}/{len(new_jobs)} (Overall) | {evaluated_count}/{limit if limit else 'Unlimited'} (Processing Limit): '{job_title}' ({job_url}) --")
+        logger.info(f"-- Evaluating job {i+1}/{len(jobs_to_evaluate)} (Overall) | {evaluated_count}/{limit if limit else 'Unlimited'} (Processing Limit): '{job_title}' ({job_url}) --")
 
         if not job_url:
             logger.warning(f"Skipping job '{job_title}' due to missing URL.")

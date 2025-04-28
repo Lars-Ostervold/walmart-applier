@@ -43,22 +43,46 @@ class JobFilter:
         except Exception as e:
             logger.error(f"Failed to save processed jobs to {self.storage_file}: {str(e)}")
 
-    def filter_new_jobs(self, found_jobs: List[Dict[str, str]]) -> List[Dict[str, str]]:
-        """Identify jobs from the found list that are not yet in processed_jobs."""
-        new_jobs_to_process = []
-        urls_found = {job['url'] for job in found_jobs if 'url' in job} # Set of URLs found now
-        processed_urls = set(self.processed_jobs.keys())
+    def get_jobs_to_process(self, found_jobs: List[Dict[str, str]]) -> Tuple[List[Dict], List[Dict]]:
+        """Identify jobs that need processing.
+
+        Separates jobs into two lists:
+        1. new_jobs: Jobs not previously seen (URL not in processed_jobs.json).
+        2. retry_jobs: Jobs previously seen but ended in an error state
+                      (status is not 'Applied' or 'Not Relevant').
+
+        Returns:
+            Tuple[List[Dict], List[Dict]]: A tuple containing (new_jobs, retry_jobs).
+        """
+        new_jobs = []
+        retry_jobs = []
+        final_statuses = {"Applied", "Not Relevant"} # Statuses that mean we shouldn't retry
 
         for job in found_jobs:
             job_url = job.get('url')
-            if job_url and job_url not in processed_urls:
-                new_jobs_to_process.append(job)
-                logger.info(f"Identified new job to evaluate: {job.get('title', '[No Title]')} ({job_url})")
-            elif job_url:
-                logger.debug(f"Skipping already processed job: {job.get('title', '[No Title]')} ({job_url})")
+            if not job_url:
+                logger.warning(f"Found job listing with missing URL: {job.get('title', '[No Title]')}")
+                continue
 
-        logger.info(f"Found {len(found_jobs)} jobs total, {len(new_jobs_to_process)} are new and need evaluation.")
-        return new_jobs_to_process
+            if job_url not in self.processed_jobs:
+                new_jobs.append(job)
+                logger.info(f"Identified new job to evaluate: {job.get('title', '[No Title]')} ({job_url})")
+            else:
+                # Job exists in processed_jobs, check its status
+                job_entry = self.processed_jobs[job_url]
+                current_status = job_entry.get('status')
+                job_title = job.get('title', job_entry.get('title', '[No Title]')) # Use latest title
+
+                if current_status and current_status not in final_statuses:
+                    retry_jobs.append(job) # Add the job found *now* for reprocessing
+                    logger.info(f"Identified job to retry (status: {current_status}): {job_title} ({job_url})")
+                else:
+                    # Job has a final status or no status, skip it
+                    logger.debug(f"Skipping already processed job with final status '{current_status}': {job_title} ({job_url})")
+
+        total_to_process = len(new_jobs) + len(retry_jobs)
+        logger.info(f"Found {len(found_jobs)} jobs total. {total_to_process} need processing ({len(new_jobs)} new, {len(retry_jobs)} retries).")
+        return new_jobs, retry_jobs
 
     def update_job_status(self, job_url: str, title: str, status: str, explanation: str = None):
         """Update the status of a job in the processed list and save.
@@ -120,20 +144,22 @@ if __name__ == "__main__":
     print(f"Initial processed jobs (simulated): {list(job_filter.processed_jobs.keys())}")
 
     # Filter jobs
-    new_jobs = job_filter.filter_new_jobs(test_jobs_found)
+    new_jobs, retry_jobs = job_filter.get_jobs_to_process(test_jobs_found)
     
     # Print results
-    print(f"\nFound {len(new_jobs)} new jobs out of {len(test_jobs_found)} total jobs found:")
+    print(f"\nFound {len(new_jobs)} new jobs and {len(retry_jobs)} retry jobs out of {len(test_jobs_found)} total jobs found:")
     for job in new_jobs:
         print(f"  - New job: {job['title']} - {job['url']}")
+    for job in retry_jobs:
+        print(f"  - Retry job: {job['title']} - {job['url']}")
         
     # Test updating status
-    if new_jobs:
+    if new_jobs or retry_jobs:
         print("\nTesting status update...")
-        test_job_to_update = new_jobs[0]
+        test_job_to_update = new_jobs[0] if new_jobs else retry_jobs[0]
         job_filter.update_job_status(test_job_to_update['url'], test_job_to_update['title'], "Relevant", "LLM determined fit.")
         job_filter.update_job_status("https://careers.walmart.com/job3", "Data Analyst", "Not Relevant", "Mismatch based on LLM.")
         print(f"Current state of processed jobs in memory: {job_filter.processed_jobs}")
         # Note: This test will write to processed_jobs.json
     else:
-        print("\nNo new jobs to test status update.") 
+        print("\nNo new or retry jobs to test status update.") 

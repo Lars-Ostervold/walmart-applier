@@ -1,0 +1,25 @@
+{
+  "https://careers.walmart.com/us/jobs/WD2149258-data-scientist-iii": {
+    "explanation": "Submission process failed. See logs.",
+    "history": [
+      {
+        "explanation": "The job description aligns well with the candidate's skills in Python, machine learning, and data science, and it does not violate either hard rule.",
+        "status": "Relevant",
+        "timestamp": "2025-04-28T09:44:28.522426"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-04-28T09:44:36.723989"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-04-28T09:46:50.580784"
+      }
+    ],
+    "last_updated": "2025-04-28T09:46:50.580784",
+    "status": "Error_Submitting",
+    "title": "Data Scientist III"
+  }
+}

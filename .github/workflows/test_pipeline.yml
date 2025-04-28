@@ -4,6 +4,9 @@ name: Test Job Application Pipeline
 on: 
   workflow_dispatch:
 
+permissions:
+  contents: write  # Allow pushing to the repository
+
 jobs:
   test_run_pipeline:
     runs-on: ubuntu-latest # Use a standard Linux runner
@@ -11,24 +14,29 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history for proper versioning
+        token: ${{ secrets.GITHUB_TOKEN }}  # Use the default token
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.9.13' # Specify your desired Python version
 
-    - name: Install Pandoc and LaTeX (LuaLaTeX) and Fonts
+    - name: Install system dependencies
       run: |
-        sudo apt-get update -y
-        # Install pandoc, texlive components, and Roboto font
-        sudo apt-get install -y --no-install-recommends pandoc texlive-luatex texlive-latex-recommended texlive-fonts-recommended fonts-roboto
-        echo "Pandoc, TeX Live, and Roboto font installed."
+        sudo apt-get update
+        sudo apt-get install -y pandoc texlive-latex-base texlive-fonts-recommended texlive-extra-utils texlive-latex-extra
 
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        echo "Python dependencies installed."
+
+    - name: Configure Git
+      run: |
+        git config --global user.name "GitHub Actions Test"
+        git config --global user.email "actions-test@github.com"
 
     - name: Run the application pipeline (Limited Test)
       env:
@@ -39,20 +47,31 @@ jobs:
       # Run main.py with the --limit 1 flag for testing a single job
       run: python main.py --limit 1
 
-    - name: Upload Generated PDFs
+    - name: Commit and push processed jobs history (Test Run)
+      run: |
+        if [[ -f processed_jobs.json ]]; then
+          git add processed_jobs.json
+          # Use a different commit message for test runs
+          git commit -m "Update processed jobs history (Test Run) [skip ci]" || echo "No changes to commit"
+          git push
+        else
+          echo "No processed_jobs.json file found to commit"
+        fi
+
+    - name: Upload Generated PDFs (Test Run)
       # This step runs even if the previous steps fail (to potentially capture logs/partial results)
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: test-generated-resumes-pdfs
+        name: test-generated-pdfs
         path: generated_pdfs/ # Upload the directory with results
         if-no-files-found: ignore # Don't fail if no PDFs were generated
 
-    - name: Upload Edited Markdown Resumes
+    - name: Upload Edited Resumes (Test Run)
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: test-edited-resumes-markdown
+        name: test-edited-resumes
         path: edited_resumes/
         if-no-files-found: ignore
 

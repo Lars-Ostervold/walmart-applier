@@ -1,68 +1,87 @@
 name: Scheduled Job Application Pipeline
 
 on:
-  workflow_dispatch: # Allow manual triggering
   schedule:
     # Run at 17:00 UTC (12:00 PM CT / 11:00 AM CST) and 22:00 UTC (5:00 PM CT / 4:00 PM CST) daily
     - cron: '0 17 * * *'
     - cron: '0 22 * * *'
 
+permissions:
+  contents: write  # Allow pushing to the repository
+
 jobs:
-  scheduled_run_pipeline:
-    runs-on: ubuntu-latest # Use a standard Linux runner
-
+  run-pipeline:
+    runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper versioning
+          token: ${{ secrets.GITHUB_TOKEN }}  # Use the default token
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.9.13' # Specify your desired Python version
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9.13'
 
-    - name: Install Pandoc and LaTeX (LuaLaTeX) and Fonts
-      run: |
-        sudo apt-get update -y
-        # Install pandoc, texlive components, and Roboto font
-        sudo apt-get install -y --no-install-recommends pandoc texlive-luatex texlive-latex-recommended texlive-fonts-recommended fonts-roboto
-        echo "Pandoc, TeX Live, and Roboto font installed."
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-latex-base texlive-fonts-recommended texlive-extra-utils texlive-latex-extra
 
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        echo "Python dependencies installed."
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Run the application pipeline (Full Run)
-      env:
-        # IMPORTANT: Set GOOGLE_API_KEY in your repo's Settings > Secrets and variables > Actions
-        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }} 
-        WORKDAY_EMAIL: ${{ secrets.WORKDAY_EMAIL }}
-        WORKDAY_PASSWORD: ${{ secrets.WORKDAY_PASSWORD }}
-      # Run main.py without the limit flag for a full run
-      run: python main.py
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
 
-    - name: Upload Generated PDFs
-      # This step runs even if the previous steps fail
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: scheduled-generated-resumes-pdfs
-        path: generated_pdfs/ # Upload the directory with results
-        if-no-files-found: ignore # Don't fail if no PDFs were generated
+      - name: Run application pipeline
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          WORKDAY_EMAIL: ${{ secrets.WORKDAY_EMAIL }}
+          WORKDAY_PASSWORD: ${{ secrets.WORKDAY_PASSWORD }}
+        run: python main.py
 
-    - name: Upload Edited Markdown Resumes
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: scheduled-edited-resumes-markdown
-        path: edited_resumes/
-        if-no-files-found: ignore
+      - name: Commit and push processed jobs history
+        run: |
+          if [[ -f processed_jobs.json ]]; then
+            git add processed_jobs.json
+            git commit -m "Update processed jobs history [skip ci]" || echo "No changes to commit"
+            git push
+          else
+            echo "No processed_jobs.json file found to commit"
+          fi
 
-    - name: Upload Processed Jobs Log
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: scheduled-processed-jobs-log
-        path: processed_jobs.json
-        if-no-files-found: ignore 
+      - name: Upload generated PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-pdfs
+          path: generated_pdfs/
+          retention-days: 7  # Keep PDFs for 7 days
+
+      - name: Upload edited resumes
+        uses: actions/upload-artifact@v4
+        with:
+          name: edited-resumes
+          path: edited_resumes/
+          retention-days: 7  # Keep edited resumes for 7 days
+
+      - name: Upload Edited Markdown Resumes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scheduled-edited-resumes-markdown
+          path: edited_resumes/
+          if-no-files-found: ignore
+
+      - name: Upload Processed Jobs Log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scheduled-processed-jobs-log
+          path: processed_jobs.json
+          if-no-files-found: ignore 

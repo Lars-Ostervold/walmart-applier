@@ -1,6 +1,6 @@
 # LARS OSTERVOLD
 
-[LOstervold@dow.com](mailto:LOstervold@dow.com) | 918.845.3010 | [LinkedIn](https://www.linkedin.com/in/larsostervold/) | [GitHub](https://github.com/Lars-Ostervold)
+[Ostervold.Berent@gmail.com](mailto:ostervold.berent@gmail.com) | 918.845.3010 | [LinkedIn](https://www.linkedin.com/in/larsostervold/) | [GitHub](https://github.com/Lars-Ostervold)
 
 ## SUMMARY
 

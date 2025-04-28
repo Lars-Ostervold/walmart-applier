@@ -22,6 +22,29 @@
     "status": "Error_Submitting",
     "title": "Principal, Data Scientist"
   },
+  "https://careers.walmart.com/us/jobs/WD2111652-principal-data-scientist": {
+    "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_Principal,_Data_Scientist_2111652.pdf",
+    "history": [
+      {
+        "explanation": "The role aligns well with the candidate's extensive data science experience, Python proficiency, and cloud experience, and does not violate the hard rules.",
+        "status": "Relevant",
+        "timestamp": "2025-04-28T19:12:24.502585"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-04-28T19:12:36.838684"
+      },
+      {
+        "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_Principal,_Data_Scientist_2111652.pdf",
+        "status": "Error_PDF_Generation",
+        "timestamp": "2025-04-28T19:13:46.393609"
+      }
+    ],
+    "last_updated": "2025-04-28T19:13:46.393609",
+    "status": "Error_PDF_Generation",
+    "title": "Principal, Data Scientist"
+  },
   "https://careers.walmart.com/us/jobs/WD2149258-data-scientist-iii": {
     "explanation": "Submission process failed. See logs.",
     "history": [

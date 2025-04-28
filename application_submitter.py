@@ -738,26 +738,63 @@ class ApplicationSubmitter:
             
             # Handle terms and conditions checkbox
             logger.info("Accepting terms and conditions...")
+            checkbox_selector = (By.ID, "termsAndConditions--acceptTermsAndAgreements")
+            
+            # 1. Wait for presence first
             terms_checkbox = WebDriverWait(self.driver, 10).until(
-                EC.element_to_be_clickable((By.ID, "termsAndConditions--acceptTermsAndAgreements"))
+                EC.presence_of_element_located(checkbox_selector)
             )
+            logger.info("Terms checkbox found in DOM.")
             
-            # Scroll to the bottom of the page to ensure the checkbox is visible
-            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(1)  # Wait for scroll to complete
+            # 2. Scroll into center view
+            logger.info("Scrolling terms checkbox into center view...")
+            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", terms_checkbox)
             
-            # Scroll the checkbox into view and ensure it's clickable
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", terms_checkbox)
-            time.sleep(0.5)
-            
-            # Try to click the checkbox
+            # 3. Pause slightly longer for animations/settling
+            time.sleep(1.5)  
+
+            # 5. Try JavaScript click first, then direct click as fallback
+            logger.info("Attempting to click terms checkbox (JS first)...")
             try:
-                terms_checkbox.click()
-            except Exception as e:
-                logger.warning(f"Direct click failed, trying JavaScript click: {e}")
+                # Use the element found by presence wait
+                if not terms_checkbox.is_enabled():
+                     logger.warning("Terms checkbox found but is disabled. Cannot click.")
+                     return False # Can't click a disabled element
+                     
+                # Try JS click first
                 self.driver.execute_script("arguments[0].click();", terms_checkbox)
-            
-            logger.info("Accepted terms and conditions")
+                logger.info("JavaScript click executed on terms checkbox.")
+                # Verify selection after a brief pause
+                time.sleep(0.5)
+                
+                # Refresh element state before checking selection
+                terms_checkbox = self.driver.find_element(*checkbox_selector) # Re-find to avoid staleness
+                if not terms_checkbox.is_selected():
+                    logger.warning("Checkbox not selected after JS click, attempting direct click...")
+                    # Ensure it's interactable before direct click attempt
+                    WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(checkbox_selector)).click()
+                    time.sleep(0.5)
+                    # Re-check after direct click
+                    terms_checkbox = self.driver.find_element(*checkbox_selector) # Re-find again
+                
+                # Final check
+                if terms_checkbox.is_selected():
+                     logger.info("Accepted terms and conditions successfully.")
+                else:
+                     logger.error("Failed to select the terms and conditions checkbox after JS and direct click attempts.")
+                     # Optional: Add screenshot here
+                     self.driver.save_screenshot("terms_checkbox_failure.png")
+                     return False # Indicate failure
+                     
+            except TimeoutException:
+                logger.error("Timeout waiting for checkbox to be clickable during fallback direct click.")
+                self.driver.save_screenshot("terms_checkbox_timeout.png")
+                return False
+            except Exception as e:
+                logger.error(f"Error clicking terms checkbox: {e}")
+                # Optional: Add screenshot here
+                self.driver.save_screenshot("terms_checkbox_error.png")
+                return False # Indicate failure
             
             logger.info("Successfully completed voluntary disclosures")
             return True

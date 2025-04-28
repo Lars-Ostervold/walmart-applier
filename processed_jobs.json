@@ -67,5 +67,28 @@
     "last_updated": "2025-04-28T18:34:19.095497",
     "status": "Error_PDF_Generation",
     "title": "Data Scientist III"
+  },
+  "https://careers.walmart.com/us/jobs/WD2152894-senior-data-scientist": {
+    "explanation": "Submission process failed. See logs.",
+    "history": [
+      {
+        "explanation": "The job aligns well with the user's skills in data science, machine learning, Python, and cloud technologies, and it does not violate any hard rules.",
+        "status": "Relevant",
+        "timestamp": "2025-04-28T18:49:58.493352"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-04-28T18:50:07.669988"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-04-28T18:51:26.135344"
+      }
+    ],
+    "last_updated": "2025-04-28T18:51:26.135344",
+    "status": "Error_Submitting",
+    "title": "Senior, Data Scientist"
   }
 }

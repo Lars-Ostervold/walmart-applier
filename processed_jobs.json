@@ -114,9 +114,24 @@
         "explanation": "Submission process failed. See logs.",
         "status": "Error_Submitting",
         "timestamp": "2025-05-01T17:33:07.549740"
+      },
+      {
+        "explanation": "The job description aligns well with the candidate's skills in machine learning, MLOps, and Python, and there are no violations of the hard rules.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:06:29.380077"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:08:06.728571"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-05-01T22:31:27.445947"
       }
     ],
-    "last_updated": "2025-05-01T17:33:07.549740",
+    "last_updated": "2025-05-01T22:31:27.445947",
     "status": "Error_Submitting",
     "title": "Senior, Data Scientist - Machine Learning"
   },
@@ -406,9 +421,24 @@
         "explanation": "Submission process failed. See logs.",
         "status": "Error_Submitting",
         "timestamp": "2025-05-01T17:32:35.818210"
+      },
+      {
+        "explanation": "The job description aligns well with the user's skills in deep learning, GenAI, Python, and experience in building AI-powered applications.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:06:24.925605"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:07:55.555475"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-05-01T22:30:55.668306"
       }
     ],
-    "last_updated": "2025-05-01T17:32:35.818210",
+    "last_updated": "2025-05-01T22:30:55.668306",
     "status": "Error_Submitting",
     "title": "Data Scientist III, Walmart Data Ventures"
   },
@@ -644,7 +674,7 @@
     "title": "Senior, Data Scientist"
   },
   "https://careers.walmart.com/us/jobs/WD2089771-usa-senior-manager-data-science": {
-    "explanation": "Submission process failed. See logs.",
+    "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_(USA)_Senior_Manager,_Data_Science_2089771.pdf",
     "history": [
       {
         "explanation": "The role aligns well with the candidate's experience in data science, Python, and management, while also meeting the hard rules.",
@@ -720,10 +750,25 @@
         "explanation": "Submission process failed. See logs.",
         "status": "Error_Submitting",
         "timestamp": "2025-05-01T17:36:50.839922"
+      },
+      {
+        "explanation": "The role aligns well with the candidate's data science expertise, particularly in Python, and experience with machine learning and cloud technologies, while not violating either hard rule.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:07:13.087879"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:09:40.748544"
+      },
+      {
+        "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_(USA)_Senior_Manager,_Data_Science_2089771.pdf",
+        "status": "Error_PDF_Generation",
+        "timestamp": "2025-05-01T22:27:52.894473"
       }
     ],
-    "last_updated": "2025-05-01T17:36:50.839922",
-    "status": "Error_Submitting",
+    "last_updated": "2025-05-01T22:27:52.894473",
+    "status": "Error_PDF_Generation",
     "title": "(USA) Senior Manager, Data Science"
   },
   "https://careers.walmart.com/us/jobs/WD2093355-usa-senior-software-engineer": {
@@ -884,7 +929,7 @@
     "title": "Manager, Strategic Account Management- Data Ventures"
   },
   "https://careers.walmart.com/us/jobs/WD2107341-usa-senior-data-scientist": {
-    "explanation": "Submission process failed. See logs.",
+    "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_(USA)_Senior,_Data_Scientist_2107341.pdf",
     "history": [
       {
         "explanation": "The role aligns strongly with the candidate's data science, machine learning, and cloud experience.",
@@ -975,10 +1020,25 @@
         "explanation": "Submission process failed. See logs.",
         "status": "Error_Submitting",
         "timestamp": "2025-05-01T17:34:11.163262"
+      },
+      {
+        "explanation": "The job description aligns well with the candidate's data science and machine learning experience, and it does not violate either hard rule.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:06:42.473088"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:08:37.701377"
+      },
+      {
+        "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_(USA)_Senior,_Data_Scientist_2107341.pdf",
+        "status": "Error_PDF_Generation",
+        "timestamp": "2025-05-01T22:19:45.750248"
       }
     ],
-    "last_updated": "2025-05-01T17:34:11.163262",
-    "status": "Error_Submitting",
+    "last_updated": "2025-05-01T22:19:45.750248",
+    "status": "Error_PDF_Generation",
     "title": "(USA) Senior, Data Scientist"
   },
   "https://careers.walmart.com/us/jobs/WD2107616-senior-data-engineer": {
@@ -1079,7 +1139,7 @@
     "title": "Principal, Data Scientist"
   },
   "https://careers.walmart.com/us/jobs/WD2111653-senior-data-scientist": {
-    "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_Senior,_Data_Scientist_2111653.pdf",
+    "explanation": "Submission process failed. See logs.",
     "history": [
       {
         "explanation": "The job description aligns well with the candidate's strong data science and machine learning skills, Python proficiency, and experience with related technologies.",
@@ -1170,10 +1230,25 @@
         "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_Senior,_Data_Scientist_2111653.pdf",
         "status": "Error_PDF_Generation",
         "timestamp": "2025-05-01T17:14:16.392504"
+      },
+      {
+        "explanation": "The job aligns well with the candidate's data science background, Python proficiency, and experience with model deployment and cloud technologies.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:06:14.833460"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:07:35.858711"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-05-01T22:30:11.251292"
       }
     ],
-    "last_updated": "2025-05-01T17:14:16.392504",
-    "status": "Error_PDF_Generation",
+    "last_updated": "2025-05-01T22:30:11.251292",
+    "status": "Error_Submitting",
     "title": "Senior, Data Scientist"
   },
   "https://careers.walmart.com/us/jobs/WD2113264-senior-software-engineer-backend": {
@@ -1361,9 +1436,24 @@
         "explanation": "Submission process failed. See logs.",
         "status": "Error_Submitting",
         "timestamp": "2025-05-01T17:34:42.978582"
+      },
+      {
+        "explanation": "The job description aligns well with the candidate's data science background, including experience with deep learning, cloud technologies, and time series forecasting, and does not violate the hard rules.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:06:46.910240"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:08:46.713493"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-05-01T22:33:03.245031"
       }
     ],
-    "last_updated": "2025-05-01T17:34:42.978582",
+    "last_updated": "2025-05-01T22:33:03.245031",
     "status": "Error_Submitting",
     "title": "(USA) Staff, Data Scientist"
   },
@@ -1573,7 +1663,7 @@
     "title": "Senior Director, Data Engineering"
   },
   "https://careers.walmart.com/us/jobs/WD2134869-usa-principal-data-scientist": {
-    "explanation": "Submission process failed. See logs.",
+    "explanation": "Successfully submitted via automation.",
     "history": [
       {
         "explanation": "The role aligns well with the candidate's data science background, Python proficiency, and experience in machine learning, while not violating any hard rules.",
@@ -1589,14 +1679,29 @@
         "explanation": "Submission process failed. See logs.",
         "status": "Error_Submitting",
         "timestamp": "2025-05-01T17:31:28.805572"
+      },
+      {
+        "explanation": "The job description aligns with the user's data science skills, with a focus on Python and machine learning, and it does not violate the hard rules.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:06:51.302436"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:08:56.948091"
+      },
+      {
+        "explanation": "Successfully submitted via automation.",
+        "status": "Applied",
+        "timestamp": "2025-05-01T22:34:35.628274"
       }
     ],
-    "last_updated": "2025-05-01T17:31:28.805572",
-    "status": "Error_Submitting",
+    "last_updated": "2025-05-01T22:34:35.628274",
+    "status": "Applied",
     "title": "(USA) Principal, Data Scientist"
   },
   "https://careers.walmart.com/us/jobs/WD2136474-usa-manager-advanced-analytics-manager-ii-advanced-analytics-sams-club-map-business-intelligence-analyst": {
-    "explanation": "Submission process failed. See logs.",
+    "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_(USA)_Manager,_Advanced_Analytics_-_Manager_II,_Advanced_Analytics_-_Sam's_Club_MAP,_Business_Intell_2136474.pdf",
     "history": [
       {
         "explanation": "The role aligns well with the candidate's skills in data analysis, dashboard creation using Tableau, and cloud technologies.",
@@ -1687,10 +1792,25 @@
         "explanation": "Submission process failed. See logs.",
         "status": "Error_Submitting",
         "timestamp": "2025-05-01T17:36:18.878408"
+      },
+      {
+        "explanation": "The role aligns with the candidate's experience in data analysis, dashboard creation, and business intelligence, and the hard rules are not violated.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:07:08.682738"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:09:31.994843"
+      },
+      {
+        "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_(USA)_Manager,_Advanced_Analytics_-_Manager_II,_Advanced_Analytics_-_Sam's_Club_MAP,_Business_Intell_2136474.pdf",
+        "status": "Error_PDF_Generation",
+        "timestamp": "2025-05-01T22:26:23.917659"
       }
     ],
-    "last_updated": "2025-05-01T17:36:18.878408",
-    "status": "Error_Submitting",
+    "last_updated": "2025-05-01T22:26:23.917659",
+    "status": "Error_PDF_Generation",
     "title": "(USA) Manager, Advanced Analytics - Manager II, Advanced Analytics - Sam's Club MAP, Business Intelligence Analyst"
   },
   "https://careers.walmart.com/us/jobs/WD2136724-senior-data-scientist": {
@@ -1785,9 +1905,24 @@
         "explanation": "Submission process failed. See logs.",
         "status": "Error_Submitting",
         "timestamp": "2025-05-01T17:32:00.803881"
+      },
+      {
+        "explanation": "The job description aligns well with the candidate's skills in machine learning, deep learning, cloud technologies (GCP, Azure), and time series forecasting, without violating the hard rules.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:06:20.376574"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:07:44.913668"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-05-01T22:30:23.700487"
       }
     ],
-    "last_updated": "2025-05-01T17:32:00.803881",
+    "last_updated": "2025-05-01T22:30:23.700487",
     "status": "Error_Submitting",
     "title": "Senior, Data Scientist"
   },
@@ -1883,9 +2018,24 @@
         "explanation": "Submission process failed. See logs.",
         "status": "Error_Submitting",
         "timestamp": "2025-05-01T17:37:22.675963"
+      },
+      {
+        "explanation": "The role aligns with the candidate's data science, Python, and cloud skills and does not violate any hard rules.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:07:17.503214"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:09:49.246644"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-05-01T22:36:11.589936"
       }
     ],
-    "last_updated": "2025-05-01T17:37:22.675963",
+    "last_updated": "2025-05-01T22:36:11.589936",
     "status": "Error_Submitting",
     "title": "Senior, Data Engineer"
   },
@@ -2043,9 +2193,24 @@
         "explanation": "Submission process failed. See logs.",
         "status": "Error_Submitting",
         "timestamp": "2025-05-01T17:33:39.350740"
+      },
+      {
+        "explanation": "The job description aligns well with the candidate's skills in machine learning, deep learning, and Python, and doesn't violate any hard rules.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:06:38.042889"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:08:26.576176"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-05-01T22:32:31.282046"
       }
     ],
-    "last_updated": "2025-05-01T17:33:39.350740",
+    "last_updated": "2025-05-01T22:32:31.282046",
     "status": "Error_Submitting",
     "title": "(USA) Senior Data Scientist, Tech"
   },
@@ -2191,7 +2356,7 @@
     "title": "Staff Data Analyst"
   },
   "https://careers.walmart.com/us/jobs/WD2148343-sales-strategy-manager-business-analysis-and-insights-walmart-connect": {
-    "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_Sales_Strategy_Manager,_Business_Analysis_And_Insights_-_Walmart_Connect_2148343.pdf",
+    "explanation": "Submission process failed. See logs.",
     "history": [
       {
         "explanation": "The role aligns with the user's analytical and strategic skills, even though it is not a direct data science role, while also not violating the hard rules.",
@@ -2282,10 +2447,25 @@
         "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_Sales_Strategy_Manager,_Business_Analysis_And_Insights_-_Walmart_Connect_2148343.pdf",
         "status": "Error_PDF_Generation",
         "timestamp": "2025-05-01T17:25:57.686719"
+      },
+      {
+        "explanation": "The candidate's experience in data analysis, modeling, and presentation aligns with the job's requirements, and it doesn't violate any of the specified hard rules.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:07:04.307511"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:09:24.232099"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-05-01T22:35:39.656561"
       }
     ],
-    "last_updated": "2025-05-01T17:25:57.686719",
-    "status": "Error_PDF_Generation",
+    "last_updated": "2025-05-01T22:35:39.656561",
+    "status": "Error_Submitting",
     "title": "Sales Strategy Manager, Business Analysis And Insights - Walmart Connect"
   },
   "https://careers.walmart.com/us/jobs/WD2148508-principal-data-analyst": {
@@ -2830,14 +3010,29 @@
         "explanation": "Submission process failed. See logs.",
         "status": "Error_Submitting",
         "timestamp": "2025-05-01T17:35:46.914148"
+      },
+      {
+        "explanation": "The candidate's data science and leadership experience align well with the job requirements, and it does not violate either hard rule.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:06:59.968308"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:09:15.872096"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-05-01T22:35:07.675407"
       }
     ],
-    "last_updated": "2025-05-01T17:35:46.914148",
+    "last_updated": "2025-05-01T22:35:07.675407",
     "status": "Error_Submitting",
     "title": "Group Director, Data Analytics"
   },
   "https://careers.walmart.com/us/jobs/WD2155374-usa-senior-data-scientist": {
-    "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_(USA)_Senior,_Data_Scientist_2155374.pdf",
+    "explanation": "Submission process failed. See logs.",
     "history": [
       {
         "explanation": "The candidate's skills and experience in machine learning, Python, and cloud technologies align well with the job description's focus on data science and model development.",
@@ -2928,14 +3123,29 @@
         "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_(USA)_Senior,_Data_Scientist_2155374.pdf",
         "status": "Error_PDF_Generation",
         "timestamp": "2025-05-01T17:18:56.988126"
+      },
+      {
+        "explanation": "The job description aligns well with the candidate's data science and machine learning expertise, and it does not violate either hard rule.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:06:33.641627"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:08:17.250537"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-05-01T22:31:59.333392"
       }
     ],
-    "last_updated": "2025-05-01T17:18:56.988126",
-    "status": "Error_PDF_Generation",
+    "last_updated": "2025-05-01T22:31:59.333392",
+    "status": "Error_Submitting",
     "title": "(USA) Senior, Data Scientist"
   },
   "https://careers.walmart.com/us/jobs/WD2156795-usa-senior-manager-automation-engineering-data-engineer": {
-    "explanation": "Submission process failed. See logs.",
+    "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_(USA)_Senior_Manager,_Automation_Engineering_-_Data_Engineer_2156795.pdf",
     "history": [
       {
         "explanation": "The job description aligns well with the candidate's data engineering and cloud experience, particularly in Python, GCP, and data pipeline development.",
@@ -3026,10 +3236,25 @@
         "explanation": "Submission process failed. See logs.",
         "status": "Error_Submitting",
         "timestamp": "2025-05-01T17:35:15.052984"
+      },
+      {
+        "explanation": "The role is a good match for the user's data engineering and Python skills, and it does not violate any of the hard rules.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:06:55.721588"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:09:05.559848"
+      },
+      {
+        "explanation": "[FAILED_1_PAGE] generated_pdfs/resume_(USA)_Senior_Manager,_Automation_Engineering_-_Data_Engineer_2156795.pdf",
+        "status": "Error_PDF_Generation",
+        "timestamp": "2025-05-01T22:23:09.977230"
       }
     ],
-    "last_updated": "2025-05-01T17:35:15.052984",
-    "status": "Error_Submitting",
+    "last_updated": "2025-05-01T22:23:09.977230",
+    "status": "Error_PDF_Generation",
     "title": "(USA) Senior Manager, Automation Engineering - Data Engineer"
   },
   "https://careers.walmart.com/us/jobs/WD2157077-senior-paralegal": {
@@ -3057,6 +3282,29 @@
     "last_updated": "2025-04-29T17:07:30.353322",
     "status": "Not Relevant",
     "title": "Senior Analyst, Licensing Compliance"
+  },
+  "https://careers.walmart.com/us/jobs/WD2162687-senior-crime-data-analyst-investigative-risk-and-operational-compliance-center-senior-data-analyst": {
+    "explanation": "Submission process failed. See logs.",
+    "history": [
+      {
+        "explanation": "The role aligns well with the candidate's data analysis, statistical analysis, and Python skills, while not violating the Java or big data rules.",
+        "status": "Relevant",
+        "timestamp": "2025-05-01T22:06:10.501442"
+      },
+      {
+        "explanation": "LLM failed to generate edited resume.",
+        "status": "Error_Editing_Resume",
+        "timestamp": "2025-05-01T22:07:24.837090"
+      },
+      {
+        "explanation": "Submission process failed. See logs.",
+        "status": "Error_Submitting",
+        "timestamp": "2025-05-01T22:29:38.922926"
+      }
+    ],
+    "last_updated": "2025-05-01T22:29:38.922926",
+    "status": "Error_Submitting",
+    "title": "Senior Crime Data Analyst, Investigative Risk and Operational Compliance Center (Senior, Data Analyst)"
   },
   "https://careers.walmart.com/us/jobs/WD2162724-senior-manager-finance-supply-chain-fp-a": {
     "explanation": "The job description focuses on finance and FP&A, a significant departure from the user's data science and AI expertise.",
